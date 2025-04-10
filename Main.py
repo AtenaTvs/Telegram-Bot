@@ -1,35 +1,19 @@
-import logging
+import os
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 
-# توکن ربات تلگرام خود را وارد کنید
-TOKEN = "your-telegram-bot-token"
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+ADMIN_IDS = os.environ.get("ADMIN_IDS").split(',')
 
-# آیدی‌های ادمین
-ADMIN_IDS = [7968070502]  # آیدی ادمین‌ها را وارد کنید
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Welcome! An admin will contact you soon.")
 
-# تنظیمات لاگ برای نمایش خطاها
-logging.basicConfig(level=logging.INFO)
+async def forward_to_admins(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    for admin_id in ADMIN_IDS:
+        await context.bot.send_message(chat_id=admin_id, text=f"Message from {update.message.chat.id}:\n{update.message.text}")
 
-# دستورات ربات
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text("سلام! من ربات تلگرام شما هستم.")
+app = ApplicationBuilder().token(BOT_TOKEN).build()
+app.add_handler(CommandHandler("start", start))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, forward_to_admins))
 
-def help(update: Update, context: CallbackContext):
-    update.message.reply_text("کمک می‌خواهید؟")
-
-def main():
-    # ایجاد آپداتر و دیسپچر
-    updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
-
-    # افزودن دستورات به ربات
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
-
-    # شروع ربات
-    updater.start_polling()
-    updater.idle()
-
-if __name__ == '__main__':
-    main()
+app.run_polling()
