@@ -1,3 +1,1 @@
-# Telegram-Bot
-Telegram bot using pythoN
-web: python main.py
+worker: python3 main.py
