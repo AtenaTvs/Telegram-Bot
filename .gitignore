@@ -1,0 +1,23 @@
+# Ignore .env file containing sensitive information (e.g., bot token)
+.env
+
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore log files
+*.log
+
+# Ignore system files (macOS, Windows, etc.)
+.DS_Store
+Thumbs.db
+
+# Ignore environment and IDE-related files (for common Python editors)
+.vscode/
+.idea/
+*.iml
+
+# Ignore virtual environment directories
+venv/
+env/
