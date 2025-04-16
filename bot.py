@@ -11,7 +11,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 TOKEN = os.environ.get("TOKEN")
 
 # آیدی عددی ادمین‌ها
-admin_ids_str = os.environ.get("ADMIN_IDS")
+admin_ids_str = os.environ.get("ADMIN_IDS", "[]")
 ADMIN_IDS = json.loads(admin_ids_str)  
 
 # تبلیغ آخر
